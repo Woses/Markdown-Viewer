@@ -35,7 +35,7 @@
         </div>
         <div class="toolbar-left">
           <a id="rawLink" href="#" target="_blank" rel="noopener noreferrer">Datei öffnen</a>
-          <button id="printBtn" type="button">Datei drucken</button>
+          <button id="printPreviewBtn" type="button">Datei Druckübersicht</button>
           <button id="copyLinkBtn" type="button">Direktlink kopieren</button>
         </div>
       </div>
@@ -48,6 +48,16 @@
         </article>
       </section>
     </main>
+  </div>
+
+  <div id="printOverlay" class="print-overlay" hidden aria-hidden="true">
+    <div class="print-preview-toolbar">
+      <button id="closePrintPreviewBtn" type="button">Schließen</button>
+    </div>
+
+    <div class="print-preview-page">
+      <article id="printPreviewContent" class="print-preview-content"></article>
+    </div>
   </div>
 
   <script src="script.js"></script>
