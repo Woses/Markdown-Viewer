@@ -10,6 +10,7 @@ const contentEl = document.getElementById("content");
 const currentFileEl = document.getElementById("currentFile");
 const rawLinkEl = document.getElementById("rawLink");
 const copyLinkBtn = document.getElementById("copyLinkBtn");
+const printBtn = document.getElementById("printBtn");
 const sidebarToggle = document.getElementById("sidebarToggle");
 const sidebarToggleMain = document.getElementById("sidebarToggleMain");
 
