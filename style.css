@@ -349,3 +349,215 @@ body {
     padding: 22px;
   }
 }
+
+.print-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(11, 16, 32, .97);
+  backdrop-filter: blur(10px);
+  overflow: auto;
+  padding: 24px;
+}
+
+.print-preview-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.print-preview-toolbar button {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: .95rem;
+}
+
+.print-preview-toolbar button:hover {
+  border-color: var(--accent);
+}
+
+.print-preview-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 12px 8px 40px;
+}
+
+.print-preview-content {
+  line-height: 1.75;
+  overflow-wrap: break-word;
+  color: var(--text);
+}
+
+.print-preview-content h1,
+.print-preview-content h2,
+.print-preview-content h3,
+.print-preview-content h4 {
+  line-height: 1.2;
+  margin-top: 1.7em;
+  margin-bottom: .65em;
+}
+
+.print-preview-content h1 {
+  font-size: 2rem;
+  margin-top: 0;
+}
+
+.print-preview-content h2 {
+  font-size: 1.5rem;
+  padding-bottom: .35em;
+}
+
+.print-preview-content h3 {
+  font-size: 1.2rem;
+}
+
+.print-preview-content p,
+.print-preview-content ul,
+.print-preview-content ol,
+.print-preview-content pre,
+.print-preview-content blockquote,
+.print-preview-content table {
+  margin: 0 0 1em;
+}
+
+.print-preview-content a {
+  color: var(--accent-2);
+  text-decoration: none;
+}
+
+.print-preview-content a:hover {
+  text-decoration: underline;
+}
+
+.print-preview-content code {
+  background: rgba(255,255,255,.06);
+  padding: .12em .34em;
+  border-radius: 6px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: .92em;
+}
+
+.print-preview-content pre {
+  background: rgba(255,255,255,.04);
+  border-radius: 14px;
+  padding: 16px;
+  overflow: auto;
+}
+
+.print-preview-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.print-preview-content blockquote {
+  border-left: 4px solid var(--accent);
+  margin-left: 0;
+  padding: 4px 0 4px 14px;
+  color: var(--muted);
+}
+
+.print-preview-content table {
+  width: 100%;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+
+.print-preview-content th,
+.print-preview-content td {
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.print-preview-content hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,.12);
+  margin: 1.5em 0;
+}
+
+body.print-preview-open {
+  overflow: hidden;
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: #111827 !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #printOverlay,
+  #printOverlay * {
+    visibility: visible !important;
+  }
+
+  #printOverlay {
+    position: static !important;
+    inset: auto !important;
+    background: white !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .print-preview-toolbar {
+    display: none !important;
+  }
+
+  .print-preview-page {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-preview-content {
+    color: #111827 !important;
+  }
+
+  .print-preview-content a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  .print-preview-content code {
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+  }
+
+  .print-preview-content pre {
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+    border-radius: 0 !important;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .print-preview-content blockquote {
+    color: #4b5563 !important;
+    border-left-color: #9ca3af !important;
+  }
+
+  .print-preview-content th,
+  .print-preview-content td {
+    border-color: #d1d5db !important;
+  }
+
+  .print-preview-content hr {
+    border-top-color: #d1d5db !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 18mm;
+  }
+}
