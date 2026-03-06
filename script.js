@@ -10,7 +10,11 @@ const contentEl = document.getElementById("content");
 const currentFileEl = document.getElementById("currentFile");
 const rawLinkEl = document.getElementById("rawLink");
 const copyLinkBtn = document.getElementById("copyLinkBtn");
-const printBtn = document.getElementById("printBtn");
+//const printBtn = document.getElementById("printBtn");
+const printPreviewBtn = document.getElementById("printPreviewBtn");
+const printOverlay = document.getElementById("printOverlay");
+const printPreviewContent = document.getElementById("printPreviewContent");
+const closePrintPreviewBtn = document.getElementById("closePrintPreviewBtn");
 const sidebarToggle = document.getElementById("sidebarToggle");
 const sidebarToggleMain = document.getElementById("sidebarToggleMain");
 
@@ -393,164 +397,38 @@ window.addEventListener("hashchange", () => {
 
 initializeFiles();
 
-function buildPrintDocument(title, contentHtml) {
-  return `
-    <!doctype html>
-    <html lang="de">
-    <head>
-      <meta charset="utf-8">
-      <title>${escapeHtml(title)}</title>
-      <style>
-        :root {
-          --text: #111827;
-          --muted: #4b5563;
-          --border: #d1d5db;
-          --code: #f3f4f6;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-
-        html, body {
-          margin: 0;
-          padding: 0;
-          background: white;
-          color: var(--text);
-          font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          line-height: 1.6;
-        }
-
-        body {
-          padding: 32px;
-        }
-
-        h1, h2, h3, h4 {
-          line-height: 1.2;
-          margin-top: 1.5em;
-          margin-bottom: .6em;
-          page-break-after: avoid;
-        }
-
-        h1 {
-          font-size: 2rem;
-          margin-top: 0;
-        }
-
-        h2 {
-          font-size: 1.45rem;
-          border-bottom: 1px solid var(--border);
-          padding-bottom: .3em;
-        }
-
-        h3 {
-          font-size: 1.2rem;
-        }
-
-        p, ul, ol, pre, blockquote, table {
-          margin: 0 0 1em;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        code {
-          background: var(--code);
-          border: 1px solid var(--border);
-          padding: .1em .35em;
-          border-radius: 6px;
-          font-family: "SFMono-Regular", Consolas, monospace;
-          font-size: .92em;
-        }
-
-        pre {
-          background: var(--code);
-          border: 1px solid var(--border);
-          padding: 14px;
-          border-radius: 12px;
-          overflow: auto;
-          white-space: pre-wrap;
-          word-break: break-word;
-        }
-
-        pre code {
-          background: transparent;
-          border: none;
-          padding: 0;
-        }
-
-        blockquote {
-          border-left: 4px solid #9ca3af;
-          padding-left: 14px;
-          color: var(--muted);
-          margin-left: 0;
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        th, td {
-          border: 1px solid var(--border);
-          padding: 8px 10px;
-          text-align: left;
-          vertical-align: top;
-        }
-
-        hr {
-          border: none;
-          border-top: 1px solid var(--border);
-          margin: 1.5em 0;
-        }
-
-        @page {
-          size: A4;
-          margin: 18mm;
-        }
-      </style>
-    </head>
-    <body>
-      ${contentHtml}
-    </body>
-    </html>
-  `;
-}
-
-function printCurrentDocument() {
+function openPrintPreview() {
   if (!currentPath || !contentEl.innerHTML.trim()) {
-    setStatus("Keine Datei zum Drucken geladen.");
+    setStatus("Keine Datei für die Druckübersicht geladen.");
     return;
   }
 
-  const printWindow = window.open("", "_blank", "noopener,noreferrer");
-
-  if (!printWindow) {
-    setStatus("Druckfenster konnte nicht geöffnet werden.");
-    return;
-  }
-
-  const title = currentFileEl.textContent || "Markdown-Datei";
-  const html = buildPrintDocument(title, contentEl.innerHTML);
-
-  printWindow.document.open();
-  printWindow.document.write(html);
-  printWindow.document.close();
-
-  printWindow.focus();
-
-  const tryPrint = () => {
-    printWindow.print();
-  };
-
-  if (printWindow.document.readyState === "complete") {
-    setTimeout(tryPrint, 150);
-  } else {
-    printWindow.onload = () => setTimeout(tryPrint, 150);
-  }
-
-  setStatus("Druckansicht geöffnet.");
+  printPreviewContent.innerHTML = contentEl.innerHTML;
+  printOverlay.hidden = false;
+  printOverlay.setAttribute("aria-hidden", "false");
+  document.body.classList.add("print-preview-open");
+  setStatus("Druckübersicht geöffnet.");
+  closePrintPreviewBtn.focus();
 }
-printBtn.addEventListener("click", printCurrentDocument);
+
+function closePrintPreview() {
+  printOverlay.hidden = true;
+  printOverlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("print-preview-open");
+  setStatus("Druckübersicht geschlossen.");
+}
+
+printPreviewBtn.addEventListener("click", openPrintPreview);
+closePrintPreviewBtn.addEventListener("click", closePrintPreview);
+
+printOverlay.addEventListener("click", event => {
+  if (event.target === printOverlay) {
+    closePrintPreview();
+  }
+});
+
+window.addEventListener("keydown", event => {
+  if (event.key === "Escape" && !printOverlay.hidden) {
+    closePrintPreview();
+  }
+});
